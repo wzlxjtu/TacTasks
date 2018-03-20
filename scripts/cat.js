@@ -1,6 +1,6 @@
 
 // game duration
-var duration = 0.1 * 60; // in seconds
+var duration = 1 * 60; // in seconds
 // time for per answer
 var RT = 5, adaptiveRT = 5; // response time in seconds
 var earning = 0.1;
@@ -27,7 +27,7 @@ var colors = ["Blue", "Orange", "Yellow","Purple","Red","Green"];
 var i_color = [0,1,2,3,4,5]; // color index
 var i_button = [0,1,2,3]; // button index
 
-var startTime = localStorage.getItem("startTime");
+var startTime = Date.parse(localStorage.getItem("startTime"));
 var mousedata = "";
 var mousePos = { x: -1, y: -1 };
 var lastDropTime = -1;
@@ -145,8 +145,8 @@ function failed() {
 		score-=0.1;
 		if (checkBox1.checked == false) {
 			sound.play();
+			cat2.style.visibility="visible";
 		}
-		cat2.style.visibility="visible";
 		setup();
 }
 // get element id on GUI

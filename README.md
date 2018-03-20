@@ -1,1 +1,1 @@
-This project implements a simulated file system for sorting images with Stroop effects.
+This project contains tasks and questionnaires for the keyboard and mouse study.

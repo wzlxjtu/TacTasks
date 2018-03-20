@@ -16,8 +16,8 @@ $(document).ready(function(){
     outputFile = outputFile + "Self-Report (Typing-relaxed): " + localStorage["SAM_typing_relaxed"] + "\n";
     outputFile = outputFile + "Self-Report (Typing-stressed): " + localStorage["SAM_typing_stressed"] + "\n";
     outputFile = outputFile + "Number of correctly pressed shortcuts: " + localStorage["numRight_stressed"] + "\n";
-    outputFile = outputFile + "CWT-relaxed Number of Correct and Wrong: " + localStorage["cwtlog_relaxed"] + "\n";
-    outputFile = outputFile + "CWT-stressed Number of Correct and Wrong: " + localStorage["cwtlog_stressed"] + "\n";
+	outputFile = outputFile + "CAT-relaxed Number of Correct and Wrong: " + localStorage["catlog_relaxed"] + "\n";
+	outputFile = outputFile + "CAT-stressed Number of Correct and Wrong: " + localStorage["catlog_stressed"] + "\n";
     outputFile = outputFile + "-------------------TEXT-RELAXED-------------------\n";
     outputFile = outputFile + localStorage["composition_relaxed"] + "\n";
     outputFile = outputFile + "-------------------TEXT-STRESSED-------------------\n";
@@ -26,14 +26,18 @@ $(document).ready(function(){
     outputFile = outputFile + localStorage["keylog_relaxed"] + "\n";
     outputFile = outputFile + "-------------------TYPING-STRESSED-------------------\n";
     outputFile = outputFile + localStorage["keylog_stressed"] + "\n";
-    outputFile = outputFile + "-------------------MOUSE-RELAXED-------------------\n";
-    outputFile = outputFile + localStorage["mouselog_relaxed"] + "\n";
-    outputFile = outputFile + "-------------------MOUSE-STRESSED-------------------\n";
-    outputFile = outputFile + localStorage["mouselog_stressed"] + "\n";
+    outputFile = outputFile + "-------------------ANSWER-CAT-RELAXED-------------------\n";
+	outputFile = outputFile + localStorage["answerCatLog_relaxed"] + "\n";
+	outputFile = outputFile + "-------------------ANSWER-CAT-STRESSED-------------------\n";
+	outputFile = outputFile + localStorage["answerCatLog_stressed"] + "\n";
+	outputFile = outputFile + "-------------------MOUSE-CAT-RELAXED-------------------\n";
+	outputFile = outputFile + localStorage["mouseCatLog_relaxed"] + "\n";
+	outputFile = outputFile + "-------------------MOUSE-CAT-STRESSED-------------------\n";
+	outputFile = outputFile + localStorage["mouseCatLog_stressed"] + "\n";
     
     if (localStorage["composition_relaxed"] == undefined || localStorage["composition_stressed"] == undefined) {
       $("#upload-message").html("Completion code is not generated because task data is missing. Please make sure every task is completed as required")
-      return;
+      //return;
     }
     
     function makeid() {
@@ -46,7 +50,7 @@ $(document).ready(function(){
       return text;
     }
     
-  function randomize(n) {
+	function randomize(n) {
 		var ranNum = Math.round(Math.random()*n);
 		return ranNum;
 	}
