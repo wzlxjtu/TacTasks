@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="scripts/typingTask.js"></script>
+	<script src="scripts/timer.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/index.css">
+  <title>PSI | Typing Task</title>
+</head>
+<body>
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+	    <span class="close">&times;</span>
+	    <p>For this task, you need to pay attention to the circle while typing. Whenever the circle turns into red, you need to press the <b>ESC</b> key winthin 1.5s. Failing to do so for more than 20% of the times would result in failure in the task.</p>
+	  </div>
+	</div>
+	<div class="container">
+    <div class="page-header">
+		<h1>Please, describe the image below <span class="timer" style="font-size:40px;float:right"></span></h1>
+		
+	</div>
+	<div class="circle"></div>
+    <div class="typing-container">
+      <div class="typing-img-container">
+        <img/>
+      </div>
+      <div class="typing-text-container">
+        <textarea id="composition" rows="30" placeholder="Please, use this area to write about the image on the left..."></textarea>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

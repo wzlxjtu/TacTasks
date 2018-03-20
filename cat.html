@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Color Word Test</title>
+	<script src="scripts/jquery-1.12.4.js"></script>
+	<script src="scripts/jquery-ui.js"></script>
+    <link href="styles/catstyle.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+	<div class="bg">
+	<div id="progress-bar">
+		<span id="progress-bar-fill" style="width: 0%"></span>
+	</div>
+	<audio id="sound" src="resources/fail.wav" preload="auto"></audio>
+    <img id="cat" src="resources/cat.jpg" alt="cat">
+    <img id="cat2" src="resources/cat2.jpg" alt="cat2">
+    <h1 id="target"></h1>
+    <h2 id="choose1">Choose <span id="choose2">Important</span></h2>
+	<h2 id="score1">$: <span id="score2">0</span></h2>
+	<h2 id="counter"></h2>
+	<div id="popup">
+	<!-- Popup Div Starts Here -->
+		<div id="popupWindow">
+		<!-- Visible window -->
+			<div id="setting">
+				<h1>Settings</h1>
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<button id="setButton" onclick="popup_hide()">Set</button>
+				<h2 id="cong_text">Congruent Mode</h2>
+				<label class="switch" id="switch1">
+				  <input id="checkBox1" type="checkbox">
+				  <span class="slider round"></span>
+				</label>
+				<h2 id="adap_text">Adaptive Mode</h2>
+				<label class="switch" id="switch2">
+				  <input id="checkBox2" type="checkbox">
+				  <span class="slider round"></span>
+				</label>
+				<h2 id="hide_text">Hide Counter</h2>
+				<label class="switch" id="switch3">
+				  <input id="checkBox3" type="checkbox" checked>
+				  <span class="slider round"></span>
+				</label>
+			</div>
+		</div>
+	<!-- Popup Div Ends Here -->
+	</div>
+	<input type="image" id="settings_img" onclick="popup_show()" src="resources/settings.png" />
+    <button class="button" id="start" onclick="startGame()">Start</button>
+    <button class="button" id="button0" onclick="b0_click()"></button>
+	<button class="button" id="button1" onclick="b1_click()"></button>
+    <button class="button" id="button2" onclick="b2_click()"></button>
+    <button class="button" id="button3" onclick="b3_click()"></button>
+    </div>
+	<script src="scripts/cat.js"></script>
+  </body>
+</html>

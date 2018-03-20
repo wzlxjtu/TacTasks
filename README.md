@@ -1,0 +1,1 @@
+This project implements a simulated file system for sorting images with Stroop effects.

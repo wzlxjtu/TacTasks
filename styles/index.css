@@ -1,0 +1,235 @@
+#homepage p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+#homepage li {
+    font-weight: bold;
+}
+
+.centered-img {
+    display: table;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.page-header {
+    margin-bottom: 50px;
+}
+
+.affect-img img {
+    width: 90%;
+    display: table;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.label-left {
+	position: absolute;
+	top: 50%;
+	left: 0;
+}
+
+.label-right {
+	position: absolute;
+	top: 50%;
+	right: 0;
+}
+
+.group-SAM {
+    position: relative;
+}
+
+.group-radio-btns {
+	margin-left: 10.9%;
+}
+
+.group-radio-btns .radio-inline {
+	margin-right: 11.1%;
+}
+
+.next-page {
+    margin-top: 30px;
+    margin-bottom: 100px;
+}
+
+.question-tlx {
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.question-tlx h3 {
+    margin-bottom: 30px;
+}
+
+.label-low {
+    position: absolute;
+    left: 0;
+    top: 65%;
+}
+
+.label-high {
+    position: absolute;
+    right: 0;
+    top: 65%;
+}
+
+.tlx-option-wrapper {
+    width: 80%;
+    display: table;
+    margin: 0 auto;
+}
+
+.tlx-option-wrapper .tlx-option{
+    display: inline-block;
+    width: 5%;
+    height: 30px;
+    border: 1px solid black;
+    background: white;
+}
+
+@supports (-ms-ime-align:auto) {
+    .tlx-option-wrapper .tlx-option {
+       margin-right: -5px;
+   }
+}
+
+@-moz-document url-prefix() { 
+  .tlx-option-wrapper .tlx-option {
+       margin-right: -5px;
+   }
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   .tlx-option-wrapper .tlx-option {
+       margin-right: -5px;
+   }
+}
+
+.tlx-option-wrapper .tlx-option:hover{
+    background: #d9534f;
+    cursor: pointer;
+}
+
+.tlx-option-wrapper .tlx-option.selected{
+    background: #d9534f;
+}
+
+.typing-container {
+    display: block;
+    width: 100%;
+}
+
+.typing-img-container, .typing-text-container {
+    display: inline-block;
+    width: 48%;
+}
+
+.typing-img-container img, .typing-text-container textarea {
+    width: 100%;
+    vertical-align: top;
+    transition: all .2s ease-in-out;
+}
+
+.typing-img-container img:hover {
+    cursor: zoom-in;
+    transform: scale(1.5);
+}
+
+.typing-text-container {
+    margin-left: 2%;
+}
+
+.typing-text-container textarea {
+    height: 500px;
+    padding: 5px 5px 5px 5px;
+    resize: none;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 20%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    font-size: 18pt;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+}
+
+/* The Close Button */
+.close {
+    color: black;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.circle {
+    display: none;
+    margin: 0 auto;
+    margin-top: -20px;
+    margin-bottom: 20px;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 1px;
+	background: white;
+	width: 100px;
+	height: 100px;
+}
+
+.circle.red {
+    background: red;
+}
+
+.circle.green {
+    background: green;
+}
+
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+}
+
+#upload-message {
+    display: table;
+    margin: 0 auto;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+#code {
+    display: none;
+    margin: 0 auto;
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 18pt;
+}
