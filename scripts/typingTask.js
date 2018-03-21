@@ -1,13 +1,64 @@
 $(document).ready(function(){
     var buffer = "";
-    var circleIsRed = false;
-    var timeDistraction = 1500;
+    var matIsUp = false;
+    var timeDistraction = 5000;
     var numDistractions = 0;
     var numRight = 0;
     var numWrongConsecutive = 0;
-    var pressedWhileRed = false;
+    var pressedWhileMatWasUp = false;
+    var current = 0;
     
-    var pauses = [14,11,10,14,15,13,15,17,23,16,19,16,14,19,14,17,10,14,13,12,14,11,10,14,15,13,15,17,23,16,19,16,14,19,14,17,10,14,13,12];
+    var fail = new Audio('resources/fail.wav'); 
+    var success = new Audio('resources/success.wav'); 
+    var alert = new Audio('resources/alert.wav'); 
+    
+    var questions = [
+        "20 + 36",
+         "25 + 17",
+         "75 + ?? = 82",
+         "12 + 6 + 8",
+		 "36 + 5 + ?? = 45",
+		 "-8 + 4 - 8",
+		 "51 - 27", "3",
+		 "83 - ?? = 67",
+		 "15 - ?? = 9 + ??",
+		 "20 + ?? = 38 - ??",
+		 "04 x 13",
+		 "09 x 16",
+		 "27 + 6 x 3",
+		 "3 x 4 + 154",
+		 "200 - 20 x 2",
+		 "60 ÷ 5",
+		 "30 ÷ 6 + 3 x 2",
+		 "96 ÷ 12",
+		 "36 ÷ 18 x 5"
+    ];
+    				
+    var answers = {
+		0:["56","46","48","64"],
+		1:["42","37","32","45"],
+		2:["07","157","-07","5"],
+		3:["26","24","20","28"],
+		4:["4","5","2","3"],
+		5:["-12","8","-4","12"],
+		6:["24","27","17","21"],
+		7:["6-3","12-3","11-1","7-6"],
+		8:["16","12","-8","18"],
+		9:["3","2"," 5","4"],
+		10:["9","10","3","8"],
+		11:["52","39","48","46"],
+		12:["144","152","136","128"],
+		13:["45","43","53","38"],
+		14:["166","168","172","184"],
+		15:["160","360","380","180"],
+		16:["12","15","8","16"],
+		17:["11","12","13","8"],
+		18:["8","6","12","14"],
+		19:["10","8","15","12"]
+	};
+    
+    //var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+    var pauses = [2,20,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
     var currentPauseIndex = 0;
     
     // Loading data from memory
@@ -32,7 +83,6 @@ $(document).ready(function(){
 	// Depending on whether is the relaxed or stressed block, different settings will be laoded
 	if (relaxedOrStressed == "stressed"){
 	    $(".typing-img-container img").attr("src", "resources/image3.jpg");
-	    $(".circle").css("display", "table");
 	    $("#myModal").css("display", "block");
 	    
 	    // Pop up instructions
@@ -71,17 +121,22 @@ $(document).ready(function(){
 	}
 	
 	function paintCircle(){
-	    circleIsRed = true;
+	    matIsUp = true;
+	    loadQuestionAndAnswers();
+	    setProgressBar();
 	    numDistractions += 1;
-	    pressedWhileRed = false;
-	    $(".circle").addClass("red").delay(timeDistraction).queue(function(next){
-	    	$(this).removeClass("red");
-	    	circleIsRed = false;
+	    pressedWhileMatWasUp = false;
+	    
+	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
+	    	$(".mat-modal").css("display","none");
+	    	matIsUp = false;
 	    	
-	    	if (!pressedWhileRed){
+	    	if (!pressedWhileMatWasUp){
+	    		fail.play();
+	    		current += 1;
 	    		numWrongConsecutive += 1;
 	    		if (numWrongConsecutive >= 2){
-	    			alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
+	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
 	    		}
 	    	}
 	    	
@@ -89,57 +144,61 @@ $(document).ready(function(){
         });
 	}
 	
-	// Check if shortcut is pressed. If it is, increment numRight and paint the circle green
-	function checkShortcutPressed(evt){
-	    if (!evt) evt = event;
-	    if (evt.which == 27){
-	        if (circleIsRed) {
-	        	$(".circle").addClass("green").delay(200).queue(function(next){
-	        		$(this).removeClass("green");
-		            $(this).removeClass("red");
-		            circleIsRed = false;
-		            next();
-		        });
-		        numWrongConsecutive = 0;
-		        pressedWhileRed = true;
-		        
-	            numRight += 1;
-	            circleIsRed = false;
-	            
-	            var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed));
-	            numRightLocalStorage += 1;
-	            localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
-	        }
-	    }
-	}
-	
-	function checkIfControlV(evt){
-	    if (!evt) evt = event;
-	    return ((evt.metaKey || evt.ctrlKey) && ( String.fromCharCode(evt.which).toLowerCase() === 'v') )
+	function setProgressBar(){
+		var elem = $(".mat-bar");
+		var width = 1;
+		var id = setInterval(frame, 25);
 		
-	}
-	
-	document.addEventListener('keydown', (event) => {
-	  handleTypingEvent(event, '0');
-	});
-	
-	document.addEventListener('keyup', (event) => {
-	  handleTypingEvent(event, '1');
-	});
-	
-	function handleTypingEvent(e, keyUpDown){
-		checkShortcutPressed(e);
-		if (!checkIfControlV(e)){
-		    var now = new Date();
-			var timestamp = now.toISOString();
-			var stroke = timestamp +  ',' + keyUpDown + ','  + e.code;
-			buffer += stroke + '\n';
-			localStorage.setItem('keylog_' + relaxedOrStressed, buffer);
-		}
-		else{
-			alert("The use of CTRL+C/V is forbidden. Please, describe the painting with your own words!");	
-			e.preventDefault();
-			e.stopPropagation();
+		function frame() {
+			if (width >= 100) {
+			  clearInterval(id);
+			} else {
+			  width = width + 0.5; 
+			  elem.width(width + '%'); 
+			}
 		}
 	}
+	
+	// Check if shortcut is pressed. If it is, increment numRight and paint the circle green
+	$(".mat-option").click(function(){
+		$(".mat-modal").css("display","none");
+	    var answer = $(this).text();
+	    pressedWhileMatWasUp = true;
+	    if (answer == answers[current-1][0]){
+	    	success.play();
+	    	numWrongConsecutive = 0;
+	        
+            numRight += 1;
+            matIsUp = false;
+            
+            var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed));
+            numRightLocalStorage += 1;
+            localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
+        }else {
+        	fail.play();	
+        }
+	});
+	
+	function loadQuestionAndAnswers(){
+		alert.play();
+		$(".mat-question").html(questions[current]);
+	    
+	    var shuffled = shuffle(answers[current].slice());
+	    $("#mat1").text(shuffled[0]);
+    	$("#mat2").text(shuffled[1]);
+    	$("#mat3").text(shuffled[2]);
+    	$("#mat4").text(shuffled[3]);
+    	current += 1;
+	}
+	
+	function shuffle(array) {
+      var copy = [], n = array.length, i;
+      
+      while (n) {
+        i = Math.floor(Math.random() * n--);
+        copy.push(array.splice(i, 1)[0]);
+      }
+      
+      return copy;
+    }
 });
