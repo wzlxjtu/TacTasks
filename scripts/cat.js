@@ -1,8 +1,8 @@
 
 // game duration
-var duration = 1 * 60; // in seconds
+var duration = 5 * 60; // in seconds
 // time for per answer
-var RT = 5, adaptiveRT = 5; // response time in seconds
+var RT = 3, adaptiveRT = 3; // response time in seconds
 var earning = 0.1;
 
 // Loading data from memory
@@ -46,6 +46,10 @@ function startGame() {
 	setup();
 }
 function setup() {
+	var perc = 100 - Math.round((currTime/(duration*1000))*100);
+	if (perc <= 50) {
+		changeButtonPosition();
+	}
 	clearTimeout(timing);
 	adaptiveRT = adaptiveRT < 2 ? 2 : adaptiveRT;
 	adaptiveRT = adaptiveRT > 5 ? 5 : adaptiveRT;
@@ -102,6 +106,9 @@ function setup() {
 		button2.style.color = "white";
 		button3.style.color = "white";
 	}
+	if (perc <= 50) {
+		changeButtonPosition();
+	}
 }
 function durationUpdate() {
     var perc = 100 - Math.round((currTime/(duration*1000))*100);
@@ -122,7 +129,6 @@ function durationUpdate() {
 		  setTimeout(durationUpdate, 20);
       }
 	  else {
-		  
 		  // When GAME OVER
 		  setTimeout(clearTimeout(timing), 100);
 		  hideGUI();
@@ -143,6 +149,8 @@ function failed() {
 		currResponse = 0;
 		adaptiveRT = lambda*adaptiveRT + (1-lambda)*5;
 		score-=0.1;
+		wrong++;
+		localStorage.setItem('catlog_' + relaxedOrStressed, [correct,wrong]);
 		if (checkBox1.checked == false) {
 			sound.play();
 			cat2.style.visibility="visible";
@@ -163,6 +171,7 @@ function getGUI() {
 	button1 = document.getElementById("button1");
 	button2 = document.getElementById("button2");
 	button3 = document.getElementById("button3");
+	settings = document.getElementById("settings_img");
 }
 function hideGUI() {
 	counter.style.visibility="hidden";
@@ -175,6 +184,7 @@ function hideGUI() {
 	button1.style.visibility="hidden";
 	button2.style.visibility="hidden";
 	button3.style.visibility="hidden";
+	settings.style.visibility="hidden";
 }
 function showGUI() {
 	counter.style.visibility="visible";
@@ -185,6 +195,12 @@ function showGUI() {
 	button1.style.visibility="visible";
 	button2.style.visibility="visible";
 	button3.style.visibility="visible";
+}
+function changeButtonPosition() {
+	button0.style.left = '26%';button0.style.top = '80%';
+	button1.style.left = '39%';button1.style.top = '80%';
+	button2.style.left = '52%';button2.style.top = '80%';
+	button3.style.left = '65%';button3.style.top = '80%';
 }
 function updateOnClick(answer) {
 	cat2.style.visibility="hidden";
