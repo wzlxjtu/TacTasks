@@ -365,22 +365,22 @@ document.answers = {
 }
 
 var paintings = {};
-paintings['session1_relaxed_1'] = "resources/paintings/image1.jpg";
-paintings['session1_relaxed_2'] = "resources/paintings/image2.jpg";
-paintings['session1_stressed_1'] = "resources/paintings/image3.jpg";
-paintings['session1_stressed_2'] = "resources/paintings/image4.jpg";
-paintings['session2_relaxed_1'] = "resources/paintings/image5.jpg";
-paintings['session2_relaxed_2'] = "resources/paintings/image6.jpg";
-paintings['session2_stressed_1'] = "resources/paintings/image7.jpg";
-paintings['session2_stressed_2'] = "resources/paintings/image8.jpg";
-paintings['session3_relaxed_1'] = "resources/paintings/image9.jpg";
-paintings['session3_relaxed_2'] = "resources/paintings/image10.jpg";
-paintings['session3_stressed_1'] = "resources/paintings/image11.jpg";
-paintings['session3_stressed_2'] = "resources/paintings/image12.jpg";
-paintings['session4_relaxed_1'] = "resources/paintings/image13.jpg";
-paintings['session4_relaxed_2'] = "resources/paintings/image14.jpg";
-paintings['session4_stressed_1'] = "resources/paintings/image15.jpg";
-paintings['session4_stressed_2'] = "resources/paintings/image16.jpg";
+paintings['session1_relaxed1'] = "resources/paintings/image1.jpg";
+paintings['session1_relaxed2'] = "resources/paintings/image2.jpg";
+paintings['session1_stressed1'] = "resources/paintings/image3.jpg";
+paintings['session1_stressed2'] = "resources/paintings/image4.jpg";
+paintings['session2_relaxed1'] = "resources/paintings/image5.jpg";
+paintings['session2_relaxed2'] = "resources/paintings/image6.jpg";
+paintings['session2_stressed1'] = "resources/paintings/image7.jpg";
+paintings['session2_stressed2'] = "resources/paintings/image8.jpg";
+paintings['session3_relaxed1'] = "resources/paintings/image9.jpg";
+paintings['session3_relaxed2'] = "resources/paintings/image10.jpg";
+paintings['session3_stressed1'] = "resources/paintings/image11.jpg";
+paintings['session3_stressed2'] = "resources/paintings/image12.jpg";
+paintings['session4_relaxed1'] = "resources/paintings/image13.jpg";
+paintings['session4_relaxed2'] = "resources/paintings/image14.jpg";
+paintings['session4_stressed1'] = "resources/paintings/image15.jpg";
+paintings['session4_stressed2'] = "resources/paintings/image16.jpg";
 
 document.paintings = paintings;
 

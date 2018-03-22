@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="scripts/sessionInfo.js"></script>
+<title>PSI Study - Welcome!</title>
+</head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<h1>This section is to be filled by the experimenter</h1>      
+		</div>
+		<h2 id="h2_daysession">Please, provide the participant's ID, along with the study's day and session</h3>
+		<form id="form-config" action="instructions.html">
+			<div id="form-group">
+				<label for="txtparticipant">Participant's ID:</label>
+				<input id="txtparticipant" type="number" class="form-control" required></input>
+				<br/>
+				<label for="selsession">Select session:</label>
+				<select class="form-control" id="selsession">
+					<option>session 1</option>
+					<option>session 2</option>
+					<option>session 3</option>
+					<option>session 4</option>
+				</select>
+				<br/>
+				<input id="btn_start" type="submit" class="btn btn-danger btn-block" value="Start Study" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>

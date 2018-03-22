@@ -74,7 +74,7 @@ $( document ).ready(function(){
                 	var timestamp = now.toISOString();
                 	localStorage.setItem('endTime',timestamp);
                     SAMName = "SAM_typing_" + relaxedOrStressed;
-                    document.SAM.action = "code.html";
+                    document.SAM.action = "end.html";
                     break;
                 default:
                     document.SAM.action = "#";

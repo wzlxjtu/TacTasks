@@ -1,16 +1,15 @@
 var questions = document.questions;
 var answers = document.answers;
+var paintings = document.paintings;
 
 $(document).ready(function(){
-    var timePassedSinceMATPopup = 0;
+	var timePassedSinceMATPopup = 0;
     var start;
     var end;
     
     var buffer = "";
-    var matIsUp = false;
+    var taskDuration = 0;
     var timeDistraction = 5000;
-    var numDistractions = 0;
-    var numRight = 0;
     var numWrongConsecutive = 0;
     var pressedWhileMatWasUp = false;
     var current = randomQuestion();
@@ -20,11 +19,12 @@ $(document).ready(function(){
     var success = new Audio('resources/success.wav'); 
     var alert = new Audio('resources/alert.wav'); 
     
-    var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-    //var pauses = [2,10,10,10,10,20,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+    //var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+    var pauses = [2,10,10,10,10,10,10,10,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
     var currentPauseIndex = 0;
     
     // Loading data from memory
+    var session = localStorage.getItem("Session");
     var round = localStorage.getItem("Round");
     var easyFirst = localStorage.getItem("EasyFirst") == 'true';
     
@@ -41,11 +41,13 @@ $(document).ready(function(){
 	        success: callback,
 	        async: true
 	    });
-	}
+	};
+	
+	var imagePath = paintings[session + "_" + relaxedOrStressed + "1"];
+	$(".typing-img-container img").attr("src", imagePath);
 	
 	// Depending on whether is the relaxed or stressed block, different settings will be laoded
 	if (relaxedOrStressed == "stressed"){
-	    $(".typing-img-container img").attr("src", "resources/image3.jpg");
 	    $("#myModal").css("display", "block");
 	    
 	    // Pop up instructions
@@ -56,76 +58,14 @@ $(document).ready(function(){
  	        	var timeInterval = pauses[currentPauseIndex] * 1000;
  	        	currentPauseIndex += 1;
 	        	setTimeout(setTimer, timeInterval);	
-	        	
-	        	var z = setInterval(function() {
-					if (duration < 100){
-						localStorage.setItem("composition_" + relaxedOrStressed, $("#composition").val());
-					}
-				}, 100);
+	        	setListenerImageChangeAndComposition();
  	        });
  	    });
 	}
 	else {
-	    $(".typing-img-container img").attr("src", "resources/image4.jpg");
 	    $.loadScript('scripts/timer.js', function(){
-	    	var y = setInterval(function() {
-				if (duration < 100){
-					localStorage.setItem("composition_" + relaxedOrStressed, $("#composition").val());
-				}
-			}, 100);
+	    	setListenerImageChangeAndComposition();
 	    });
-	}
-	
-	function setTimer(){
-	    var timeInterval = pauses[currentPauseIndex] * 1000;
- 	    currentPauseIndex += 1;
-	    popupMAT();
-	    setTimeout(setTimer, timeInterval);
-	}
-	
-	function popupMAT(){
-	    matIsUp = true;
-	    loadQuestionAndAnswers();
-	    setProgressBar();
-	    numDistractions += 1;
-	    pressedWhileMatWasUp = false;
-	    disableKeyboard();
-	    $(".timer").css("visibility","hidden");
-	    
-	    start = new Date();
-	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
-	    	$(".mat-modal").css("display","none");
-	    	$(".timer").css("visibility","visible");
-	    	matIsUp = false;
-	    	
-	    	if (!pressedWhileMatWasUp){
-	    		enableKeyboard();
-	    		//fail.play();
-	    		current = randomQuestion();
-	    		duration += timeDistraction;
-	    		numWrongConsecutive += 1;
-	    		if (numWrongConsecutive >= 2){
-	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
-	    		}
-	    	}
-	    	
-            next();
-        });
-	}
-	
-	function setProgressBar(){
-		var elem = $(".mat-bar");
-		var width = 1;
-		var id = setInterval(frame, 25);
-		
-		function frame() {
-			if (width >= 100) {
-			  clearInterval(id);
-			} else {
-			  width = width + 0.5; 
-			  elem.width(width + '%'); 
-			}
-		}
 	}
 	
 	// Check if shortcut is pressed. If it is, increment numRight and paint the circle green
@@ -144,16 +84,80 @@ $(document).ready(function(){
 	    	success.play();
 	    	numWrongConsecutive = 0;
 	        
-            numRight += 1;
-            matIsUp = false;
-            
-            var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed));
-            numRightLocalStorage += 1;
+            var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
             localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
         }else {
         	fail.play();	
         }
 	});
+	
+	
+	function setListenerImageChangeAndComposition(){
+		
+		taskDuration = duration;
+		var z = setInterval(function() {
+			if (duration < (taskDuration/2)){
+				imagePath = paintings[session + "_" + relaxedOrStressed + "2"];
+				$(".typing-img-container img").attr("src", imagePath);
+			}
+		}, 100);
+		
+		var z = setInterval(function() {
+			if (duration < 100){
+				localStorage.setItem("composition_" + relaxedOrStressed, $("#composition").val());
+			}
+		}, 100);
+	}
+	
+	function setTimer(){
+	    var timeInterval = pauses[currentPauseIndex] * 1000;
+ 	    currentPauseIndex += 1;
+	    popupMAT();
+	    setTimeout(setTimer, timeInterval);
+	}
+	
+	function popupMAT(){
+	    loadQuestionAndAnswers();
+	    setProgressBar();
+	    pressedWhileMatWasUp = false;
+	    disableKeyboard();
+	    $(".timer").css("visibility","hidden");
+	    
+	    start = new Date();
+	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
+	    	$(".mat-modal").css("display","none");
+	    	$(".timer").css("visibility","visible");
+	    	
+	    	if (!pressedWhileMatWasUp){
+	    		enableKeyboard();
+	    		fail.play();
+	    		current = randomQuestion();
+	    		duration += timeDistraction;
+	    		numWrongConsecutive += 1;
+	    		if (numWrongConsecutive >= 2){
+	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
+	    		}
+	    	}
+	    	
+            next();
+        });
+	}
+	
+	// Starts progress bar animation
+	function setProgressBar(){
+		var elem = $(".mat-bar");
+		var width = 1;
+		var id = setInterval(frame, 25);
+		
+		function frame() {
+			if (width >= 100) {
+			  clearInterval(id);
+			} else {
+			  width = width + 0.5; 
+			  elem.width(width + '%'); 
+			}
+		}
+	}
 	
 	function loadQuestionAndAnswers(){
 		alert.play();
@@ -167,6 +171,23 @@ $(document).ready(function(){
     	
     	previous = current;
     	current = randomQuestion();
+	}
+	
+	document.addEventListener('keydown', (event) => {
+	  handleTypingEvent(event, '0');
+	});
+	
+	document.addEventListener('keyup', (event) => {
+	  handleTypingEvent(event, '1');
+	});
+	
+	function handleTypingEvent(e, keyUpDown){
+		var now = new Date();
+		var timestamp = now.toISOString();
+		var stroke = timestamp + ',' + keyUpDown + ',' + e.code;
+		buffer += stroke + '\n';
+		localStorage.setItem('keylog_' + relaxedOrStressed, buffer);
+		
 	}
 	
 	function shuffle(array) {

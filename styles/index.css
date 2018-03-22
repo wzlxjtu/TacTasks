@@ -140,10 +140,17 @@
 
 .typing-text-container {
     margin-left: 2%;
+    vertical-align: top;
+}
+
+.typing-img-container h4 {
+    display: table;
+    margin: 0 auto;
+    margin-top: 5px;
 }
 
 .typing-text-container textarea {
-    height: 500px;
+    height: 800px;
     padding: 5px 5px 5px 5px;
     resize: none;
 }

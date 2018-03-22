@@ -3,7 +3,7 @@
 var duration = 5 * 60; // in seconds
 // time for per answer
 var RT = 3, adaptiveRT = 3; // response time in seconds
-var earning = 0.1;
+var earning = 1;
 
 // Loading data from memory
 var round = localStorage.getItem("Round");
@@ -58,7 +58,7 @@ function setup() {
 	else
 		timing = window.setTimeout(failed, RT * 1000);
 	if (score < 0) score = 0;
-	document.getElementById("score2").innerHTML = score.toFixed(1);
+	document.getElementById("score2").innerHTML = score;
 	start.style.visibility = "hidden";
 	showGUI();
 	// Shuffle the random numbers
@@ -134,9 +134,6 @@ function durationUpdate() {
 		  hideGUI();
 		  if (checkBox1.checked == false)
 			score1.style.visibility = "visible";
-		  start.style.visibility = "visible";
-		  start.innerHTML = "Restart";
-		  start.style.textAlign="center";
 		  adaptiveRT = 5;
 		  localStorage.setItem("timeStamps",localStorage.getItem("timeStamps") + ((new Date).getTime() - startTime) + ",");
 		  // Incrementing Round
@@ -148,7 +145,7 @@ function durationUpdate() {
 function failed() {
 		currResponse = 0;
 		adaptiveRT = lambda*adaptiveRT + (1-lambda)*5;
-		score-=0.1;
+		score-=1;
 		wrong++;
 		localStorage.setItem('catlog_' + relaxedOrStressed, [correct,wrong]);
 		if (checkBox1.checked == false) {
