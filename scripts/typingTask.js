@@ -89,6 +89,7 @@ $(document).ready(function(){
 	    setProgressBar();
 	    numDistractions += 1;
 	    pressedWhileMatWasUp = false;
+	    disableKeyboard();
 	    $(".timer").css("visibility","hidden");
 	    
 	    start = new Date();
@@ -98,6 +99,7 @@ $(document).ready(function(){
 	    	matIsUp = false;
 	    	
 	    	if (!pressedWhileMatWasUp){
+	    		enableKeyboard();
 	    		//fail.play();
 	    		current = randomQuestion();
 	    		duration += timeDistraction;
@@ -132,6 +134,7 @@ $(document).ready(function(){
 		$(".mat-modal").css("display","none");
 		$(".timer").css("visibility","visible");
 		
+		enableKeyboard();
 		timePassedSinceMATPopup = end - start;
 		duration += timePassedSinceMATPopup;
 		
@@ -179,5 +182,14 @@ $(document).ready(function(){
     
     function randomQuestion() {
     	return Math.floor(Math.random() * questions.length);
+    }
+    
+    function disableKeyboard(){
+    	$("#composition").prop('disabled', true);
+    }
+    
+    function enableKeyboard(){
+    	$("#composition").prop('disabled', false);
+    	$("#composition").focus();
     }
 });
