@@ -135,6 +135,7 @@
 .typing-img-container img:hover {
     cursor: zoom-in;
     transform: scale(1.5);
+    transform-origin: 100% 0%;
 }
 
 .typing-text-container {

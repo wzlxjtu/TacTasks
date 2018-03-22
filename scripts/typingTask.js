@@ -1,4 +1,11 @@
+var questions = document.questions;
+var answers = document.answers;
+
 $(document).ready(function(){
+    var timePassedSinceMATPopup = 0;
+    var start;
+    var end;
+    
     var buffer = "";
     var matIsUp = false;
     var timeDistraction = 5000;
@@ -6,59 +13,15 @@ $(document).ready(function(){
     var numRight = 0;
     var numWrongConsecutive = 0;
     var pressedWhileMatWasUp = false;
-    var current = 0;
+    var current = randomQuestion();
+    var previous = current;
     
     var fail = new Audio('resources/fail.wav'); 
     var success = new Audio('resources/success.wav'); 
     var alert = new Audio('resources/alert.wav'); 
     
-    var questions = [
-        "20 + 36",
-         "25 + 17",
-         "75 + ?? = 82",
-         "12 + 6 + 8",
-		 "36 + 5 + ?? = 45",
-		 "-8 + 4 - 8",
-		 "51 - 27", "3",
-		 "83 - ?? = 67",
-		 "15 - ?? = 9 + ??",
-		 "20 + ?? = 38 - ??",
-		 "04 x 13",
-		 "09 x 16",
-		 "27 + 6 x 3",
-		 "3 x 4 + 154",
-		 "200 - 20 x 2",
-		 "60 ÷ 5",
-		 "30 ÷ 6 + 3 x 2",
-		 "96 ÷ 12",
-		 "36 ÷ 18 x 5"
-    ];
-    				
-    var answers = {
-		0:["56","46","48","64"],
-		1:["42","37","32","45"],
-		2:["07","157","-07","5"],
-		3:["26","24","20","28"],
-		4:["4","5","2","3"],
-		5:["-12","8","-4","12"],
-		6:["24","27","17","21"],
-		7:["6-3","12-3","11-1","7-6"],
-		8:["16","12","-8","18"],
-		9:["3","2"," 5","4"],
-		10:["9","10","3","8"],
-		11:["52","39","48","46"],
-		12:["144","152","136","128"],
-		13:["45","43","53","38"],
-		14:["166","168","172","184"],
-		15:["160","360","380","180"],
-		16:["12","15","8","16"],
-		17:["11","12","13","8"],
-		18:["8","6","12","14"],
-		19:["10","8","15","12"]
-	};
-    
     //var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-    var pauses = [2,20,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+    var pauses = [2,10,10,10,10,20,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
     var currentPauseIndex = 0;
     
     // Loading data from memory
@@ -116,24 +79,28 @@ $(document).ready(function(){
 	function setTimer(){
 	    var timeInterval = pauses[currentPauseIndex] * 1000;
  	    currentPauseIndex += 1;
-	    paintCircle();
+	    popupMAT();
 	    setTimeout(setTimer, timeInterval);
 	}
 	
-	function paintCircle(){
+	function popupMAT(){
 	    matIsUp = true;
 	    loadQuestionAndAnswers();
 	    setProgressBar();
 	    numDistractions += 1;
 	    pressedWhileMatWasUp = false;
+	    $(".timer").css("visibility","hidden");
 	    
+	    start = new Date();
 	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
 	    	$(".mat-modal").css("display","none");
+	    	$(".timer").css("visibility","visible");
 	    	matIsUp = false;
 	    	
 	    	if (!pressedWhileMatWasUp){
-	    		fail.play();
-	    		current += 1;
+	    		//fail.play();
+	    		current = randomQuestion();
+	    		duration += timeDistraction;
 	    		numWrongConsecutive += 1;
 	    		if (numWrongConsecutive >= 2){
 	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
@@ -161,10 +128,16 @@ $(document).ready(function(){
 	
 	// Check if shortcut is pressed. If it is, increment numRight and paint the circle green
 	$(".mat-option").click(function(){
+		end = new Date();
 		$(".mat-modal").css("display","none");
+		$(".timer").css("visibility","visible");
+		
+		timePassedSinceMATPopup = end - start;
+		duration += timePassedSinceMATPopup;
+		
 	    var answer = $(this).text();
 	    pressedWhileMatWasUp = true;
-	    if (answer == answers[current-1][0]){
+	    if (answer == answers[previous][0]){
 	    	success.play();
 	    	numWrongConsecutive = 0;
 	        
@@ -188,7 +161,9 @@ $(document).ready(function(){
     	$("#mat2").text(shuffled[1]);
     	$("#mat3").text(shuffled[2]);
     	$("#mat4").text(shuffled[3]);
-    	current += 1;
+    	
+    	previous = current;
+    	current = randomQuestion();
 	}
 	
 	function shuffle(array) {
@@ -200,5 +175,9 @@ $(document).ready(function(){
       }
       
       return copy;
+    }
+    
+    function randomQuestion() {
+    	return Math.floor(Math.random() * questions.length);
     }
 });
