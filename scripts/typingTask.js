@@ -4,32 +4,36 @@ var paintings = document.paintings;
 
 $(document).ready(function(){
 	var timePassedSinceMATPopup = 0;
-    var start;
-    var end;
-    
-    var buffer = "";
-    var taskDuration = 0;
-    var timeDistraction = 5000;
-    var numWrongConsecutive = 0;
-    var pressedWhileMatWasUp = false;
-    var current = randomQuestion();
-    var previous = current;
-    
-    var fail = new Audio('resources/fail.wav'); 
-    var success = new Audio('resources/success.wav'); 
-    var alert = new Audio('resources/alert.wav'); 
-    
-    var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-    //var pauses = [2,10,10,10,10,10,10,10,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-    var currentPauseIndex = 0;
-    
-    // Loading data from memory
-    var session = localStorage.getItem("Session");
-    var round = localStorage.getItem("Round");
-    var easyFirst = localStorage.getItem("EasyFirst") == 'true';
-    
-    // Determining if this session is within the relaxed or stressed block
-    var relaxedOrStressed = ( (easyFirst && round == 2) || (!easyFirst && round == 4) ) ? "relaxed" : "stressed";
+  var start;
+  var end;
+  
+  var buffer = "";
+  var taskDuration = 0;
+  var timeDistraction = 5000;
+  var minNumWords = 200;
+  var numPictures = 3;
+  var numWrongConsecutive = 0;
+  var pressedWhileMatWasUp = false;
+  var current = randomQuestion();
+  var currentPicture = 1;
+  var compositions = [];
+  var previous = current;
+  
+  var fail = new Audio('resources/fail.wav'); 
+  var success = new Audio('resources/success.wav'); 
+  var alert = new Audio('resources/alert.wav'); 
+  
+  //var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+  var pauses = [10,15,18,12,20,15,17,10,15,12,20,18,20,12,22,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+  var currentPauseIndex = 0;
+  
+  // Loading data from memory
+  var session = localStorage.getItem("Session");
+  var round = localStorage.getItem("Round");
+  var easyFirst = localStorage.getItem("EasyFirst") == 'true';
+  
+  // Determining if this session is within the relaxed or stressed block
+  var relaxedOrStressed = ( (easyFirst && round == 2) || (!easyFirst && round == 4) ) ? "relaxed" : "stressed";
 	
 	localStorage.setItem("numRight_" + relaxedOrStressed, 0);
 	
@@ -78,69 +82,88 @@ $(document).ready(function(){
 		timePassedSinceMATPopup = end - start;
 		duration += timePassedSinceMATPopup;
 		
-	    var answer = $(this).text();
-	    pressedWhileMatWasUp = true;
-	    if (answer == answers[previous][0]){
-	    	success.play();
-	    	numWrongConsecutive = 0;
-	        
-            var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
-            localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
-        }else {
-        	fail.play();	
-        }
+    var answer = $(this).text();
+    pressedWhileMatWasUp = true;
+    if (answer == answers[previous][0]){
+    	success.play();
+    	numWrongConsecutive = 0;
+      var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
+      localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
+    } else {
+    	fail.play();	
+    }
 	});
 	
+	$("#btn_submit").click(function() {
+    compositions[currentPicture-1] = $(".typing-text-container textarea").val();
+    currentPicture += 1;
+    $("#btn_submit").prop("disabled", true);
+    if (currentPicture <= numPictures) {
+    	$(".typing-text-container textarea").val("");
+	    var imagePath = paintings[session + "_" + relaxedOrStressed + currentPicture];
+			$(".typing-img-container img").attr("src", imagePath);
+			$("#num_words_left").text("200 words left");
+    }
+    else {
+    	duration = 500;
+    	//console.log("You reached the last picture. Please, spend the rest of the time describing this picture");
+    }
+	});
+	
+	$(".typing-text-container textarea").on("change keyup", function(){
+		var currentText = $(this).val();
+		var numWordsLeft = minNumWords - wordCount(currentText).words;
+		if (numWordsLeft > 0){
+			$("#num_words_left").text((numWordsLeft) + " words left");
+			$("#btn_submit").prop("disabled", true);
+		}else{
+			$("#num_words_left").text("0 words left");
+			$("#btn_submit").prop("disabled", false);
+		}
+	});
 	
 	function setListenerImageChangeAndComposition(){
-		
-		taskDuration = duration;
 		var z = setInterval(function() {
-			if (duration < (taskDuration/2)){
-				imagePath = paintings[session + "_" + relaxedOrStressed + "2"];
-				$(".typing-img-container img").attr("src", imagePath);
-			}
-		}, 100);
-		
-		var z = setInterval(function() {
-			if (duration < 100){
-				localStorage.setItem("composition_" + relaxedOrStressed, $("#composition").val());
+			if (duration < 200){
+				compositions[currentPicture-1] = $(".typing-text-container textarea").val();
+				
+				var allCompositions = compositions[0].concat("\n\n" + compositions[1]).concat("\n\n" + compositions[2]);
+				localStorage.setItem("composition_" + relaxedOrStressed, allCompositions);
 			}
 		}, 100);
 	}
 	
 	function setTimer(){
-	    var timeInterval = pauses[currentPauseIndex] * 1000;
- 	    currentPauseIndex += 1;
-	    popupMAT();
-	    setTimeout(setTimer, timeInterval);
+    var timeInterval = pauses[currentPauseIndex] * 1000;
+    currentPauseIndex += 1;
+    popupMAT();
+    setTimeout(setTimer, timeInterval);
 	}
 	
 	function popupMAT(){
-	    loadQuestionAndAnswers();
-	    setProgressBar();
-	    pressedWhileMatWasUp = false;
-	    disableKeyboard();
-	    $(".timer").css("visibility","hidden");
-	    
-	    start = new Date();
-	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
-	    	$(".mat-modal").css("display","none");
-	    	$(".timer").css("visibility","visible");
-	    	
-	    	if (!pressedWhileMatWasUp){
-	    		enableKeyboard();
-	    		fail.play();
-	    		current = randomQuestion();
-	    		duration += timeDistraction;
-	    		numWrongConsecutive += 1;
-	    		if (numWrongConsecutive >= 2){
-	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
-	    		}
-	    	}
-	    	
-            next();
-        });
+    loadQuestionAndAnswers();
+    setProgressBar();
+    pressedWhileMatWasUp = false;
+    disableKeyboard();
+    $(".timer").css("visibility","hidden");
+    
+    start = new Date();
+    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
+    	$(".mat-modal").css("display","none");
+    	$(".timer").css("visibility","visible");
+    	
+    	if (!pressedWhileMatWasUp){
+    		enableKeyboard();
+    		fail.play();
+    		current = randomQuestion();
+    		duration += timeDistraction;
+    		numWrongConsecutive += 1;
+    		if (numWrongConsecutive >= 2){
+    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
+    		}
+			}
+      next();
+    });
 	}
 	
 	// Starts progress bar animation
@@ -163,14 +186,14 @@ $(document).ready(function(){
 		alert.play();
 		$(".mat-question").html(questions[current]);
 	    
-	    var shuffled = shuffle(answers[current].slice());
-	    $("#mat1").text(shuffled[0]);
-    	$("#mat2").text(shuffled[1]);
-    	$("#mat3").text(shuffled[2]);
-    	$("#mat4").text(shuffled[3]);
-    	
-    	previous = current;
-    	current = randomQuestion();
+    var shuffled = shuffle(answers[current].slice());
+    $("#mat1").text(shuffled[0]);
+  	$("#mat2").text(shuffled[1]);
+  	$("#mat3").text(shuffled[2]);
+  	$("#mat4").text(shuffled[3]);
+  	
+  	previous = current;
+  	current = randomQuestion();
 	}
 	
 	document.addEventListener('keydown', (event) => {
@@ -187,31 +210,40 @@ $(document).ready(function(){
 		var stroke = timestamp + ',' + keyUpDown + ',' + e.code;
 		buffer += stroke + '\n';
 		localStorage.setItem('keylog_' + relaxedOrStressed, buffer);
-		
 	}
 	
+	function wordCount(val){
+    var wom = val.match(/\S+/g);
+    return {
+        charactersNoSpaces : val.replace(/\s+/g, '').length,
+        characters         : val.length,
+        words              : wom ? wom.length : 0,
+        lines              : val.split(/\r*\n/).length
+    };
+	}
+
 	function shuffle(array) {
-      var copy = [], n = array.length, i;
-      
-      while (n) {
-        i = Math.floor(Math.random() * n--);
-        copy.push(array.splice(i, 1)[0]);
-      }
-      
-      return copy;
+    var copy = [], n = array.length, i;
+    
+    while (n) {
+      i = Math.floor(Math.random() * n--);
+      copy.push(array.splice(i, 1)[0]);
     }
     
-    function randomQuestion() {
-    	return Math.floor(Math.random() * questions.length);
-    }
+    return copy;
+  }
     
-    function disableKeyboard(){
-    	$("#composition").focus();
-    	$("#composition").prop('disabled', true);
-    }
-    
-    function enableKeyboard(){
-    	$("#composition").prop('disabled', false);
-    	$("#composition").focus();
-    }
+  function randomQuestion() {
+  	return Math.floor(Math.random() * questions.length);
+  }
+  
+  function disableKeyboard(){
+  	$("#composition").focus();
+  	$("#composition").prop('disabled', true);
+  }
+  
+  function enableKeyboard(){
+  	$("#composition").prop('disabled', false);
+  	$("#composition").focus();
+  }
 });

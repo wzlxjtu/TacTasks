@@ -10,7 +10,7 @@
 .centered-img {
     display: table;
     margin: 0 auto;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 }
 
 .page-header {
@@ -150,9 +150,18 @@
 }
 
 .typing-text-container textarea {
-    height: 800px;
+    height: 500px;
     padding: 5px 5px 5px 5px;
     resize: none;
+}
+
+.typing-text-container input {
+    margin-top: 10px;
+}
+
+.typing-text-container label {
+    display: table;
+    margin: 0 auto;
 }
 
 /* The Modal (background) */
