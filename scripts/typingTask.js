@@ -24,7 +24,7 @@ $(document).ready(function(){
   var alert = new Audio('resources/alert.wav'); 
   
   //var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-  var pauses = [10,15,18,12,20,15,17,10,15,12,20,18,20,12,22,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
+  var pauses = [2,15,10,15,10,15,10,15,10,15,10,15,10,15,10,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,28,34,20,28,26,24];
   var currentPauseIndex = 0;
   
   // Loading data from memory
@@ -126,8 +126,9 @@ $(document).ready(function(){
 		var z = setInterval(function() {
 			if (duration < 200){
 				compositions[currentPicture-1] = $(".typing-text-container textarea").val();
+				var textSep = "--------TEXT--------\n";
 				
-				var allCompositions = compositions[0].concat("\n\n" + compositions[1]).concat("\n\n" + compositions[2]);
+				var allCompositions = textSep.concat(compositions[0]).concat("\n" + textSep + compositions[1]).concat("\n" + textSep + compositions[2]);
 				localStorage.setItem("composition_" + relaxedOrStressed, allCompositions);
 			}
 		}, 100);
