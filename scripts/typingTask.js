@@ -56,6 +56,7 @@ $(document).ready(function(){
 	    
 	    // Pop up instructions
  	    $(".close").click(function(){
+ 	    	$('#sessionDing').trigger('play');
  	        $("#myModal").css("display", "none");
  	        // set pseudointerval for showing the circles
  	        $.loadScript('scripts/timer.js', function(){
@@ -67,6 +68,7 @@ $(document).ready(function(){
  	    });
 	}
 	else {
+		$('#sessionDing').trigger('play');
 	    $.loadScript('scripts/timer.js', function(){
 	    	setListenerImageChangeAndComposition();
 	    });

@@ -1,5 +1,5 @@
 $( document ).ready(function(){
-    
+    $('#sessionDing').trigger('play');
     $(".tlx-option-wrapper .tlx-option").click(function(){
         var parent = $(this).parent();
         var child = parent.children(".selected");
