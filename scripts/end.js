@@ -1,5 +1,7 @@
 $(document).ready(function(){
   
+    $('#sessionDing').trigger('play');
+    
     var code = generateCode();
   
     var bearer = "sELtG2Agk3AAAAAAAAAAC01dxo-g837S_zkPV0XD9SFZ7MDqSR19-JFZwAYxdKE5";

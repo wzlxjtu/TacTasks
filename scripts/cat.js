@@ -38,6 +38,7 @@ getGUI();
 hideGUI();
 
 function startGame() {
+	$('#sessionDing').trigger('play');
 	localStorage.setItem("timeStamps",localStorage.getItem("timeStamps") + ((new Date).getTime() - startTime) + ",");
 	score = 0;
 	currTime = 0;
