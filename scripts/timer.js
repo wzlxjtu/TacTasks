@@ -1,6 +1,6 @@
 
 // Set the duration we're counting down
-var duration = 2 * 60 * 1000; // 10 min
+var duration = 10 * 60 * 1000; // 10 min
 
 // Update the count down every 0.1 second
 var x = setInterval(function() {
