@@ -10,4 +10,9 @@ $(document).ready(function(){
 		var participantID = $(this).val();
 		localStorage.setItem("ParticipantID", participantID);
 	});
+	
+	$("#btn_start").click(function(){
+		var easyFirst = $(".checkboxContainer input[type=checkbox]:checked").length == 1;
+		localStorage.setItem("EasyFirst", easyFirst);	
+	});
 });

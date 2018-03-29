@@ -250,3 +250,9 @@
     font-weight: bold;
     font-size: 18pt;
 }
+
+.checkboxContainer * {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: inline-block;
+}

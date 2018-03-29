@@ -62,7 +62,7 @@ $(document).ready(function(){
  	        $.loadScript('scripts/timer.js', function(){
  	        	var timeInterval = pauses[currentPauseIndex] * 1000;
  	        	currentPauseIndex += 1;
-	        	setTimeout(setTimer, timeInterval);	
+	        	setTimeout(popupMAT, timeInterval);	
 	        	setListenerImageChangeAndComposition();
  	        });
  	    });
@@ -83,33 +83,34 @@ $(document).ready(function(){
 		enableKeyboard();
 		timePassedSinceMATPopup = end - start;
 		duration += timePassedSinceMATPopup;
+		setTimer();
 		
-    var answer = $(this).text();
-    pressedWhileMatWasUp = true;
-    if (answer == answers[previous][0]){
-    	success.play();
-    	numWrongConsecutive = 0;
-      var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
-      localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
-    } else {
-    	fail.play();	
-    }
+	    var answer = $(this).text();
+	    pressedWhileMatWasUp = true;
+	    if (answer == answers[previous][0]){
+	    	success.play();
+	    	numWrongConsecutive = 0;
+	      var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
+	      localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
+	    } else {
+	    	fail.play();	
+	    }
 	});
 	
 	$("#btn_submit").click(function() {
-    compositions[currentPicture-1] = $(".typing-text-container textarea").val();
-    currentPicture += 1;
-    $("#btn_submit").prop("disabled", true);
-    if (currentPicture <= numPictures) {
-    	$(".typing-text-container textarea").val("");
-	    var imagePath = paintings[session + "_" + relaxedOrStressed + currentPicture];
-			$(".typing-img-container img").attr("src", imagePath);
-			$("#num_words_left").text("200 words left");
-    }
-    else {
-    	duration = 500;
-    	//console.log("You reached the last picture. Please, spend the rest of the time describing this picture");
-    }
+	    compositions[currentPicture-1] = $(".typing-text-container textarea").val();
+	    currentPicture += 1;
+	    $("#btn_submit").prop("disabled", true);
+	    if (currentPicture <= numPictures) {
+	    	$(".typing-text-container textarea").val("");
+		    var imagePath = paintings[session + "_" + relaxedOrStressed + currentPicture];
+				$(".typing-img-container img").attr("src", imagePath);
+				$("#num_words_left").text("200 words left");
+	    }
+	    else {
+	    	duration = 500;
+	    	//console.log("You reached the last picture. Please, spend the rest of the time describing this picture");
+	    }
 	});
 	
 	$(".typing-text-container textarea").on("change keyup", function(){
@@ -137,36 +138,37 @@ $(document).ready(function(){
 	}
 	
 	function setTimer(){
-    var timeInterval = pauses[currentPauseIndex] * 1000;
-    currentPauseIndex += 1;
-    popupMAT();
-    setTimeout(setTimer, timeInterval);
+		var timeInterval = pauses[currentPauseIndex] * 1000;
+		setTimeout(popupMAT, timeInterval);
+	    currentPauseIndex += 1;
 	}
 	
 	function popupMAT(){
-    loadQuestionAndAnswers();
-    setProgressBar();
-    pressedWhileMatWasUp = false;
-    disableKeyboard();
-    $(".timer").css("visibility","hidden");
-    
-    start = new Date();
-    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
-    	$(".mat-modal").css("display","none");
-    	$(".timer").css("visibility","visible");
-    	
-    	if (!pressedWhileMatWasUp){
-    		enableKeyboard();
-    		fail.play();
-    		current = randomQuestion();
-    		duration += timeDistraction;
-    		numWrongConsecutive += 1;
-    		if (numWrongConsecutive >= 2){
-    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
-    		}
+	    loadQuestionAndAnswers();
+	    setProgressBar();
+	    pressedWhileMatWasUp = false;
+	    disableKeyboard();
+	    $(".timer").css("visibility","hidden");
+	    
+	    start = new Date();
+	    $(".mat-modal").css("display","block").delay(timeDistraction).queue(function(next){
+	    	$(".mat-modal").css("display","none");
+	    	$(".timer").css("visibility","visible");
+	    	
+	    	if (!pressedWhileMatWasUp){
+	    		
+	    		setTimer();
+	    		enableKeyboard();
+	    		fail.play();
+	    		current = randomQuestion();
+	    		duration += timeDistraction;
+	    		numWrongConsecutive += 1;
+	    		if (numWrongConsecutive >= 2){
+	    			//alert("Please, pay attention to the circle. You MUST press ESC whenever the circle is red. Please make sure you follow this rule to ensure that you will be compensated at the end of the experiment.")
+	    		}
 			}
-      next();
-    });
+	    	next();
+	    });
 	}
 	
 	// Starts progress bar animation

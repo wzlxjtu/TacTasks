@@ -4,6 +4,7 @@ $( document ).ready(function(){
 		localStorage.setItem("startTime",startTime);
 		localStorage.setItem("Round",1);
 		localStorage.setItem("timeStamps","");
+		
         return true;
     });
 });
