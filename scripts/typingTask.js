@@ -57,6 +57,8 @@ $(document).ready(function(){
 	    // Pop up instructions
  	    $(".close").click(function(){
  	    	$('#sessionDing').trigger('play');
+ 	    	var sessionmarker = (new Date).getTime();
+			localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
  	        $("#myModal").css("display", "none");
  	        // set pseudointerval for showing the circles
  	        $.loadScript('scripts/timer.js', function(){
@@ -69,6 +71,8 @@ $(document).ready(function(){
 	}
 	else {
 		$('#sessionDing').trigger('play');
+		var sessionmarker = (new Date).getTime();
+		localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
 	    $.loadScript('scripts/timer.js', function(){
 	    	setListenerImageChangeAndComposition();
 	    });

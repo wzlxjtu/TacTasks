@@ -1,6 +1,6 @@
 
 // game duration
-var duration = 5 * 60; // in seconds
+var duration = 5 * 60; // 5 min
 // time for per answer
 var RT = 3, adaptiveRT = 3; // response time in seconds
 var earning = 1;
@@ -39,6 +39,8 @@ hideGUI();
 
 function startGame() {
 	$('#sessionDing').trigger('play');
+	var sessionmarker = (new Date).getTime();
+	localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
 	localStorage.setItem("timeStamps",localStorage.getItem("timeStamps") + ((new Date).getTime() - startTime) + ",");
 	score = 0;
 	currTime = 0;
