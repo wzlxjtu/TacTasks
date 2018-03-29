@@ -1,7 +1,8 @@
 $(document).ready(function(){
   
     $('#sessionDing').trigger('play');
-    
+    var sessionmarker = (new Date).getTime();
+	  localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
     var code = generateCode();
   
     var bearer = "sELtG2Agk3AAAAAAAAAAC01dxo-g837S_zkPV0XD9SFZ7MDqSR19-JFZwAYxdKE5";
@@ -14,6 +15,7 @@ $(document).ready(function(){
     outputFile = outputFile + "Submission Time: " + localStorage["endTime"] + "\n";
     outputFile = outputFile + "Participant ID: " + participantId + "\n";
     outputFile = outputFile + session + "\n";
+    outputFile = outputFile + "Sessionmarker: " + localStorage.getItem("sessionmarker") + "\n";
     outputFile = outputFile + "EasyFirst: " + localStorage["EasyFirst"] + "\n";
     outputFile = outputFile + "Pre-Questionnaire: " + localStorage["pre-questionnaire"] + "\n";
     outputFile = outputFile + "Self-Report (CWT-relaxed): " + localStorage["SAM_CWT_relaxed"] + "\n";

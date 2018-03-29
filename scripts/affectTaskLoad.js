@@ -1,5 +1,8 @@
 $( document ).ready(function(){
     $('#sessionDing').trigger('play');
+    var sessionmarker = (new Date).getTime();
+	localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
+	
     $(".tlx-option-wrapper .tlx-option").click(function(){
         var parent = $(this).parent();
         var child = parent.children(".selected");

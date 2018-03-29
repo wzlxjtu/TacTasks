@@ -16,7 +16,8 @@ $( document ).ready(function(){
         var valenceChecked = $("input[name=valenceradio]:checked").val();
         var weeklyUsage = $("#entry-pc-usage-week").val();
         var lifeUsage = $("#entry-pc-usage-life").val();
-        
+        if (weeklyUsage == "") weeklyUsage = "-1";
+        if (lifeUsage == "") lifeUsage = "-1";
         var response = {
             "arousal" : arousalChecked,
             "valence" : valenceChecked,

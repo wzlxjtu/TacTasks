@@ -5,7 +5,8 @@ var duration = 3 * 60 * 1000; // 3 min
 $(document).ready(function(){
   
   $('#sessionDing').trigger('play');
-  
+  var sessionmarker = (new Date).getTime();
+	localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
   // Update the count down every 0.1 second
   var x = setInterval(function() {
     // Time calculations for minutes and seconds
