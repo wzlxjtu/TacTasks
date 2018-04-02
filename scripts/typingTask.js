@@ -8,8 +8,11 @@ $(document).ready(function(){
   var end;
   
   var buffer = "";
+  var bufferMAT = "";
+  
   var taskDuration = 0;
   var timeDistraction = 5000;
+  var initialDuration = 10000;
   var minNumWords = 200;
   var numPictures = 3;
   var numWrongConsecutive = 0;
@@ -19,12 +22,15 @@ $(document).ready(function(){
   var compositions = [];
   var previous = current;
   
+  // Set the duration we're counting down
+  var durationAbsolute;
+  
   var fail = new Audio('resources/fail.wav'); 
   var success = new Audio('resources/success.wav'); 
   var alert = new Audio('resources/alert.wav'); 
   
   var pauses = [28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24,28,22,20,28,30,26,30,34,46,32,38,32,28,38,28,34,20,28,26,24];
-  //var pauses = [2,15,10,15,10,15,10,15,10,15,10,15,10,15,10,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,28,34,20,28,26,24];
+  //var pauses = [5,5,5,5,5,5,5,5,5,5,5,5,5,5,2,3,2,3,15,10,15,10,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,28,34,20,28,26,24];
   var currentPauseIndex = 0;
   
   // Loading data from memory
@@ -62,10 +68,17 @@ $(document).ready(function(){
  	        $("#myModal").css("display", "none");
  	        // set pseudointerval for showing the circles
  	        $.loadScript('scripts/timer.js', function(){
+ 	        	initialDuration = duration;
  	        	var timeInterval = pauses[currentPauseIndex] * 1000;
  	        	currentPauseIndex += 1;
 	        	setTimeout(popupMAT, timeInterval);	
 	        	setListenerImageChangeAndComposition();
+	        	
+	        	durationAbsolute = duration;
+	        	// Update the count down every 0.1 second
+				var w = setInterval(function() {
+				  durationAbsolute -= 100;
+				}, 100);
  	        });
  	    });
 	}
@@ -74,6 +87,7 @@ $(document).ready(function(){
 		var sessionmarker = (new Date).getTime();
 		localStorage.setItem("sessionmarker",localStorage.getItem("sessionmarker") + ',' + sessionmarker);
 	    $.loadScript('scripts/timer.js', function(){
+	    	initialDuration = duration;
 	    	setListenerImageChangeAndComposition();
 	    });
 	}
@@ -92,11 +106,16 @@ $(document).ready(function(){
 	    var answer = $(this).text();
 	    pressedWhileMatWasUp = true;
 	    if (answer == answers[previous][0]){
+	    	bufferMAT += (initialDuration-durationAbsolute) + ", correct\n";
 	    	success.play();
 	    	numWrongConsecutive = 0;
-	      var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
-	      localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
+		    
+		    var numRightLocalStorage = parseInt(localStorage.getItem("numRight_" + relaxedOrStressed)) + 1;
+		    localStorage.setItem("numRight_" + relaxedOrStressed, numRightLocalStorage);
+		    localStorage.setItem("timeMats", bufferMAT);
 	    } else {
+	    	bufferMAT += (initialDuration-durationAbsolute) + ", wrong\n";
+	    	localStorage.setItem("timeMats", bufferMAT);
 	    	fail.play();	
 	    }
 	});
@@ -148,6 +167,7 @@ $(document).ready(function(){
 	}
 	
 	function popupMAT(){
+		bufferMAT += (initialDuration-durationAbsolute) + ", ";
 	    loadQuestionAndAnswers();
 	    setProgressBar();
 	    pressedWhileMatWasUp = false;
@@ -160,7 +180,8 @@ $(document).ready(function(){
 	    	$(".timer").css("visibility","visible");
 	    	
 	    	if (!pressedWhileMatWasUp){
-	    		
+	    		bufferMAT += (initialDuration-durationAbsolute) + ", timeout\n";
+	    		localStorage.setItem("timeMats", bufferMAT);
 	    		setTimer();
 	    		enableKeyboard();
 	    		fail.play();
