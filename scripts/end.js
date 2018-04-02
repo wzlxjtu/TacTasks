@@ -23,9 +23,10 @@ $(document).ready(function(){
     outputFile = outputFile + "Self-Report (Typing-relaxed): " + localStorage["SAM_typing_relaxed"] + "\n";
     outputFile = outputFile + "Self-Report (Typing-stressed): " + localStorage["SAM_typing_stressed"] + "\n";
     outputFile = outputFile + "Number of correct MATs: " + localStorage["numRight_stressed"] + "\n";
-    outputFile = outputFile + "Time MATs: " + localStorage["timeMats"] + "\n";
     outputFile = outputFile + "CAT-relaxed Number of Correct and Wrong: " + localStorage["catlog_relaxed"] + "\n";
     outputFile = outputFile + "CAT-stressed Number of Correct and Wrong: " + localStorage["catlog_stressed"] + "\n";
+    outputFile = outputFile + "-------------------TIME-MATS-------------------\n";
+    outputFile = outputFile + localStorage["timeMats"] + "\n";
     outputFile = outputFile + "-------------------TEXT-RELAXED-------------------\n";
     outputFile = outputFile + localStorage["composition_relaxed"] + "\n";
     outputFile = outputFile + "-------------------TEXT-STRESSED-------------------\n";
